@@ -5,12 +5,13 @@
 ## 使用方法
 
 1. 编辑 `main.py`
-   - `proxy_ip`: 对外暴露的域名或者 IP(即梯子的代理地址，建议直接内网ip)，
+   - `host_name`: 对外暴露的域名或者 IP(取决于你的run_host的ip:run_port的端口，有域名就直接域名)，
+   - `proxy_ip`: 梯子的代理地址(建议直接内网ip)，
    - `mikan_token`: 蜜柑计划的 RSS Token，看一眼你的 RSS URL 就知道了。
    - `user_token`: 设一个你自己的 Token，用于验证身份。
    - `run_host`: Host IP（不知道这个是什么意思的就别动）。
    - `run_port`: 端口
-
+   
 2. 运行
 
    **宿主机**
@@ -24,6 +25,7 @@
    ```bash
    docker run -itd --name=mikanani-proxy \
            -p 9115:9115 \
+           -e host_name='http://xxx' \
            -e proxy_ip='http://xxx' \
            -e mikan_token='' \
            -e user_token='' \
