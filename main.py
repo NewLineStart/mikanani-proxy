@@ -17,7 +17,7 @@ mikan_base_url = "https://mikanani.me/RSS/MyBangumi?token="
 mikan_token = ""
 user_token = ""
 
-mikan_url = f"{mikan_base_url}{mikan_token}"
+
 
 
 @app.get("/")
@@ -56,5 +56,6 @@ if __name__ == "__main__":
     host_name = os.environ.get('host_name') if not host_name else host_name
     mikan_token = os.environ.get('mikan_token') if not mikan_token else mikan_token
     user_token = os.environ.get('user_token') if not user_token else user_token
+    mikan_url = f"{mikan_base_url}{mikan_token}"
     proxies = {"http": proxy_ip, "https": proxy_ip} if proxy_ip else None
     uvicorn.run(app, host=run_host, port=run_port)
