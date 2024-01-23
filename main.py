@@ -2,10 +2,13 @@ import requests
 import uvicorn
 from fastapi import FastAPI, Response
 from lxml import etree
+import os
+
 
 run_host = "0.0.0.0"
 run_port = 9115
-host_name = "http://1.2.3.4:5555"
+# 内网代理的ip（梯子的）
+proxy_ip = ""
 
 app = FastAPI()
 
@@ -20,7 +23,7 @@ mikan_url = f"{mikan_base_url}{mikan_token}"
 def root(token: str):
     if token != user_token:
         return {}
-    content = requests.get(mikan_url).content
+    content = requests.get(mikan_url, timeout=30).content
     doc = etree.fromstring(content)
 
     links = doc.xpath("//enclosure")
@@ -30,7 +33,7 @@ def root(token: str):
         url = link.get("url")
         url = url.replace(
             "https://mikanani.me",
-            f"{host_name}/get?token={user_token}&link=https://mikanani.me",
+            f"{proxy_ip}/get?token={user_token}&link=https://mikanani.me",
         )
         link.set("url", url)
 
@@ -42,10 +45,13 @@ def root(token: str):
 def get(token: str, link: str):
     if token != user_token:
         return {}
-    response = requests.get(link)
+    response = requests.get(link, timeout=30)
     media_type = response.headers.get("Content-Type")
     return Response(response.content, media_type=media_type)
 
 
 if __name__ == "__main__":
+    proxy_ip = os.environ.get('proxy_ip') if not proxy_ip else proxy_ip
+    mikan_token = os.environ.get('mikan_token') if not mikan_token else mikan_token
+    user_token = os.environ.get('user_token') if not user_token else user_token
     uvicorn.run(app, host=run_host, port=run_port)
