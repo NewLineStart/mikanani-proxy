@@ -79,7 +79,6 @@ def get(token: str, link: str):
     return Response(response.content, media_type=media_type)
 
 
-
 if __name__ == "__main__":
     proxy_ip = os.environ.get('proxy_ip') if not proxy_ip else proxy_ip
     host_name = os.environ.get('host_name') if not host_name else host_name
