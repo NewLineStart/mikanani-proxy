@@ -24,7 +24,7 @@ user_token = ""
 def root(token: str):
     if token != user_token:
         return {}
-    content = requests.get(mikan_url).content
+    content = requests.get(mikan_url, proxies=proxies, timeout=30).content
     doc = etree.fromstring(content)
 
     links = doc.xpath("//enclosure")
@@ -74,7 +74,7 @@ def root(token: str):
 def get(token: str, link: str):
     if token != user_token:
         return {}
-    response = requests.get(link)
+    response = requests.get(link, proxies=proxies, timeout=30)
     media_type = response.headers.get("Content-Type")
     return Response(response.content, media_type=media_type)
 
